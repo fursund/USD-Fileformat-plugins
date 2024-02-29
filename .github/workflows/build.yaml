@@ -31,8 +31,8 @@ jobs:
         run: |
           git clone https://github.com/PixarAnimationStudios/OpenUSD.git
           cd OpenUSD
-          git fetch origin tag v23.08
-          git checkout v23.08
+          git fetch origin tag v24.03
+          git checkout v24.03
         shell: bash
 
       - name: Setup USD Dependencies
@@ -74,20 +74,12 @@ jobs:
           cmake --install build --config release
         shell: bash
 
-      - name: Copy launch script
-        run: cp ./scripts/usd_command_prompt.cmd ./usd-install/
-        shell: bash
-
       - name: Remove usd-install/build folder
         run: rm -rf ./usd-install/build
         shell: bash
-
-      - name: Compress usd-install folder
-        run: 7z a usd-install.7z ./usd-install
-        shell: bash
-
+        
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: usd-install-${{ matrix.os }}
-          path: ./usd-install.7z
+          path: ./usd-install
