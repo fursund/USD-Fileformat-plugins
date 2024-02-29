@@ -56,6 +56,15 @@ jobs:
           fi
         shell: bash
 
+      - name: Cache USD
+        uses: actions/cache@v2
+        if: always()
+        with:
+          path: ./OpenUSD
+          key: ${{ runner.os }}-usd-${{ github.ref }}-${{ hashFiles('**/scripts/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-usd-${{ github.ref }}-
+
       - name: Configure and Build USD File Format Plugins
         run: |
           export PATH="./usd-install/bin:./usd-install/lib:${PATH}"
@@ -69,6 +78,15 @@ jobs:
           USD_INSTALL_PYTHON_PATH: ./usd-install/lib/python
         shell: bash
 
+      - name: Cache USD Install
+        uses: actions/cache@v2
+        if: always()
+        with:
+          path: ./usd-install/
+          key: ${{ runner.os }}-usd-install-${{ github.ref }}-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-usd-install-${{ github.ref }}-
+
       - name: Install USD File Format Plugins
         run: |
           cmake --install build --config release
@@ -77,7 +95,7 @@ jobs:
       - name: Remove usd-install/build folder
         run: rm -rf ./usd-install/build
         shell: bash
-        
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
