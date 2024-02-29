@@ -92,6 +92,10 @@ jobs:
           cmake --install build --config release
         shell: bash
 
+      - name: Copy launch script
+        run: cp ./scripts/usd_command_prompt.cmd ./usd-install/
+        shell: bash
+    
       - name: Remove usd-install/build folder
         run: rm -rf ./usd-install/build
         shell: bash
