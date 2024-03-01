@@ -95,13 +95,17 @@ jobs:
       - name: Copy launch script
         run: cp ./scripts/usd_command_prompt.cmd ./usd-install/
         shell: bash
-    
+
       - name: Remove usd-install/build folder
         run: rm -rf ./usd-install/build
+        shell: bash
+
+      - name: Compress usd-install folder
+        run: 7z a usd-install.7z ./usd-install
         shell: bash
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: usd-install-${{ matrix.os }}
-          path: ./usd-install
+          path: ./usd-install.7z
