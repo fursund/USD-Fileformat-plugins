@@ -47,15 +47,6 @@ jobs:
           fi
         shell: bash
 
-      - name: Cache USD
-        uses: actions/cache@v2
-        if: always()
-        with:
-          path: ./OpenUSD
-          key: ${{ runner.os }}-usd-${{ github.ref }}-${{ hashFiles('**/scripts/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-usd-${{ github.ref }}-
-      
       - name: Build and Install USD
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
@@ -64,15 +55,6 @@ jobs:
             python ./OpenUSD/build_scripts/build_usd.py ./usd-install --openimageio --build-variant release --no-examples --no-tutorials
           fi
         shell: bash
-
-      - name: Cache USD Install
-        uses: actions/cache@v2
-        if: always()
-        with:
-          path: ./usd-install/
-          key: ${{ runner.os }}-usd-install-${{ github.ref }}-${{ hashFiles('**/CMakeLists.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-usd-install-${{ github.ref }}-
 
       - name: Configure and Build USD File Format Plugins
         run: |
