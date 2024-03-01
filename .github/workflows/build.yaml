@@ -47,6 +47,15 @@ jobs:
           fi
         shell: bash
 
+      - name: Cache USD
+        uses: actions/cache@v2
+        if: always()
+        with:
+          path: ./OpenUSD
+          key: ${{ runner.os }}-usd-${{ github.ref }}-${{ hashFiles('**/scripts/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-usd-${{ github.ref }}-
+      
       - name: Build and Install USD
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
@@ -56,14 +65,14 @@ jobs:
           fi
         shell: bash
 
-      - name: Cache USD
+      - name: Cache USD Install
         uses: actions/cache@v2
         if: always()
         with:
-          path: ./OpenUSD
-          key: ${{ runner.os }}-usd-${{ github.ref }}-${{ hashFiles('**/scripts/requirements.txt') }}
+          path: ./usd-install/
+          key: ${{ runner.os }}-usd-install-${{ github.ref }}-${{ hashFiles('**/CMakeLists.txt') }}
           restore-keys: |
-            ${{ runner.os }}-usd-${{ github.ref }}-
+            ${{ runner.os }}-usd-install-${{ github.ref }}-
 
       - name: Configure and Build USD File Format Plugins
         run: |
@@ -77,15 +86,6 @@ jobs:
           USD_INSTALL_PATH_LIB: ./usd-install/lib
           USD_INSTALL_PYTHON_PATH: ./usd-install/lib/python
         shell: bash
-
-      - name: Cache USD Install
-        uses: actions/cache@v2
-        if: always()
-        with:
-          path: ./usd-install/
-          key: ${{ runner.os }}-usd-install-${{ github.ref }}-${{ hashFiles('**/CMakeLists.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-usd-install-${{ github.ref }}-
 
       - name: Install USD File Format Plugins
         run: |
