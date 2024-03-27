@@ -31,8 +31,8 @@ jobs:
         run: |
           git clone https://github.com/PixarAnimationStudios/OpenUSD.git
           cd OpenUSD
-          git fetch origin tag v24.03
-          git checkout v24.03
+          git fetch origin tag v23.08
+          git checkout v23.08
         shell: bash
 
       - name: Setup USD Dependencies
